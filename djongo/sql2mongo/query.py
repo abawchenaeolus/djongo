@@ -427,6 +427,11 @@ class InsertQuery(VoidQuery):
                     and v == self.DEFAULT
                 ):
                     continue
+                if type(v) is str and '.' in v:
+                    try:
+                        v = float(v)
+                    except:
+                        pass
                 ins[fld] = v
             docs.append(ins)
 
