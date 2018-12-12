@@ -9,6 +9,15 @@ from .operators import WhereOp
 from . import SQLDecodeError, SQLToken
 
 
+def _convert_str_to_float(value):
+    if type(value) is str and '.' in value:
+        try:
+            return float(value)
+        except:
+            pass
+    return value
+
+
 class Converter:
     def __init__(
             self,
@@ -346,7 +355,7 @@ class SetConverter(Converter):
         return {
             'update': {
                 '$set': {
-                    sql.lhs_column: self.query.params[sql.rhs_indexes]
+                    sql.lhs_column: _convert_str_to_float(self.query.params[sql.rhs_indexes])
                     if sql.rhs_indexes is not None else None
                     for sql in self.sql_tokens}
             }
